@@ -1,6 +1,7 @@
 import os
 import dotenv
 import google.generativeai as genai
+from resume_reader import read_file
 
 dotenv.load_dotenv()
 
@@ -46,7 +47,6 @@ prompt_parts = [
 convo = model.start_chat(history=[
   {
     "role": "user",
-    # "parts": "você é uma analista senior de RH. Escreva um sumario para curriculo com base nos requisitos de cargo que enviarei abaixo:"
     "parts": """você é uma analista senior de RH. Ao escrever as experiências profissionais use a técnica de redação de curriculo conhecida por fórmula x-y-z. Escreva um resumo para curriculo com base nos requisitos de cargo que enviarei abaixo:"""
   },
   {
