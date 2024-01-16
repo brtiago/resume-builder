@@ -1,0 +1,29 @@
+Fulano de Tal
+E-mail: john.doe@example.com
+Telefone: 555-123-4567
+Resumo
+John Doe é um desenvolvedor de back-end com 10 anos de experiência em desenvolvimento de software e gerenciamento de projetos. Ele tem profundo conhecimento de linguagens de programação e ferramentas de desenvolvimento, e suas sólidas habilidades de resolução de problemas e solução de problemas lhe permitem identificar e resolver problemas técnicos rapidamente. Ele também é proficiente em várias linguagens e tem certificações em programação e desenvolvimento de software.
+
+Experiência profissional
+Desenvolvedor líder de back-end, ABC Technologies, Chicago, IL - 2016 até o presente
+Desenvolveu e manteve serviços de back-end para aplicativos da Web e móveis
+Criou APIs e otimizou as consultas ao banco de dados para melhorar o desempenho
+Trabalhou com a equipe para desenvolver novos recursos e aprimorar os existentes
+Forneceu suporte técnico e solução de problemas a outros membros da equipe
+Desenvolvedor de software, XYZ Solutions, Chicago, IL - 2012 a 2016
+Projetou, desenvolveu e testou sistemas de back-end para aplicativos da Web
+Depuração e otimização do código existente para melhorar o desempenho
+Implementação de novos recursos e funcionalidades com base nos requisitos do cliente
+Prestou suporte técnico aos clientes e manteve a documentação
+Formação Acadêmica
+Bacharelado em Ciência da Computação, Universidade de Chicago, IL - 2010
+
+Habilidades
+Linguagens de programação: Java, Python, JavaScript, C++
+Ferramentas de desenvolvimento: Git, SVN, Eclipse, IntelliJ
+Bancos de dados: MySQL, MongoDB, Oracle
+Certificações
+Desenvolvedor Java Certificado, Oracle - 2011
+Desenvolvedor de software certificado, Microsoft - 2012
+Idiomas
+Inglês (fluente), espanhol (conversação)
