@@ -4,22 +4,9 @@ import google.generativeai as genai
 
 dotenv.load_dotenv()
 
-
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 
-genai.configure(api_key=GOOGLE_API_KEY)
-
-
-# Set up the model
-#generation_config = {
-#  "temperature": 0.9,
-#  "top_p": 1,
-#  "top_k": 1,
-#  "max_output_tokens": 256,
-#    "stop_sequences": [
-#        "6",
-#    ]
-#}
+genai.configure(api_key = GOOGLE_API_KEY)
 
 # Set up the model
 generation_config = {
@@ -48,12 +35,12 @@ safety_settings = [
   },
 ]
 
-model = genai.GenerativeModel(model_name="gemini-pro",
-                              generation_config=generation_config,
-                              safety_settings=safety_settings)
+model = genai.GenerativeModel(model_name = "gemini-pro",
+                              generation_config = generation_config,
+                              safety_settings = safety_settings)
 
 prompt_parts = [
-  "você é uma analista senior de RH. Escreva um sumario para curriculo com base nos requisitos de cargo que enviarei abaixo: ",
+  "você é uma analista senior de RH. Escreva um sumario para curriculo com base nos requisitos de cargo que enviarei abaixo: "
 ]
 
 convo = model.start_chat(history=[
