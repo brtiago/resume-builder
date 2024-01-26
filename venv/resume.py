@@ -83,16 +83,18 @@ def get_compatibilidade_vaga(resume, descricao_vaga):
     return response.text
 
 def create_resumo(resume, keywords):
+    perguntas = """
+    Quem você é?
+    O que você faz?
+    O que você fez?
+    O que te faz especial?
+    """
     prompt = f"""
     Aja como um recrutador profissional de TI;
     avalie o seguinte {resume} e procure por informações sobre os empregos anteriores dos candidato, cargos ocupados, responsabilidades e duração de cada experiência;
     Escreva um resumo profissional 6 linhas em primeira pessoa usando obrigatoriamente as {keywords} e respondendo as {perguntas}
     
-    perguntas: '
-    Quem você é?
-    O que você faz?
-    O que você fez?
-    O que te faz especial?'
+    
     
     """
     response = model.generate_content(prompt)
