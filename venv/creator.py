@@ -9,4 +9,4 @@ palavras_chave = """desenvolvedor java, java EE, JSF 2, desenvolvimento e manute
 desenvolvimento de aplicações, MVC, utilizando, EJB, JSP, web, hibernate, spring, JPA, 
 desenvolvimento de sistemas, banco de dados """
 
-
+print(resume.create_resumo(resume_pdf, palavras_chave))

@@ -50,19 +50,19 @@ def get_job_description(cargo, description):
     return response.text
 
 def set_linkedin_about(resume):
+    perguntas = """
+        Quem você é?
+        O que você faz?
+        O que você fez?
+        O que te faz especial?
+        """
     prompt = f"""
     aja como um recrutador profissional de TI;
     avalie este {resume} e procure por informações sobre os empregos anteriores dos candidato, cargos ocupados, responsabilidades e duração de cada experiência;
     Escreva um resumo profissional usando experiências profissionais obtidas para responder as {perguntas}:
     
-    perguntas: '
-    Quem você é?
-    O que você faz?
-    O que você fez?
-    O que te faz especial? '
-    
     cada parágrafo deve ter 3 linhas; 
-    não imprima as perguntas no texto;
+    não imprima as {perguntas} no texto;
     """
     response = model.generate_content(prompt)
     return response.text
