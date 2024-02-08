@@ -2,6 +2,8 @@ import os
 import dotenv
 import google.generativeai as genai
 
+from file import read_file
+
 dotenv.load_dotenv()
 
 genai.configure(api_key = os.getenv('GOOGLE_API_KEY'))
@@ -36,14 +38,39 @@ model = genai.GenerativeModel(model_name = "gemini-pro",
                               generation_config = generation_config,
                               safety_settings = safety_settings)
 
+resume = read_file(input("Digite o caminho completo do currículo pdf: "))
+descricao_vaga = read_file(input("Digite o caminho completo da descrição da vaga pdf: "))
 
+palavras_chave = input("Digite as palavras-chave a serem utilizadas para a criação do RESUMO PROFISSIONAL: ")
+palavras_chave = """desenvolvedor java, java EE, JSF 2, desenvolvimento e manutenção, SQL, dados oracle, tecnologias, 
+desenvolvimento de aplicações, MVC, utilizando, EJB, JSP, web, hibernate, spring, JPA, 
+desenvolvimento de sistemas, banco de dados """
 
-def get_job_description(cargo, description):
-    prompt = f"""
-    "Baseado nesta descrição de vaga: {description}, crie uma lista  das principais habilidades técnicas e conhecimentos 
-    necessários para ser um {cargo} na área mencionada. Crie também uma lista com as tecnologias ou princípios 
-    relacionadas ao {cargo}. Não escreva a descrição das tecnologias. Apenas me informe a lista. Evite postar 
-    conteúdos relacionadas a responsabilidades, beneficios e observações"
+def listar_habilidades_tecnicas_vaga(cargo, description):
+    prompt = f"""Baseado nesta descrição de vaga de emprego: {description}, crie uma lista das principais habilidades técnicas e conhecimentos
+    necessários para ser um {cargo} na área mencionada. Não escreva a descrição das tecnologias.
+    Evite postar conteúdos diferentes de habilidades técnicas e conhecimentos necessários"
+
+    ### Exemplo:
+Habilidades técnicas:
+Experiência de pelo menos 3 anos em desenvolvimento Java;
+Desenvolvimento WEB (javascript, HTML/CSS);
+Banco de Dados Relacional e SQL;
+IDE Intellij ou eclipse;
+Gerenciador de dependências Maven;
+Framework Spring Boot ou JEE;
+Versionamento de código GIT;
+Experiência em Metodologias Ágeis (scrum ou kanban).
+
+Conhecimentos:
+Modelagem de dados e Design de soluções;
+Framework Javascript Angular
+Arquiteturas modernas baseadas em microserviços e APIs (REST);
+Pipelines de CI/CD com Jenkins e Maven;
+Containers (Kubernetes/Docker;
+Sonar;
+Nexus;
+Banco de Dados Oracle.
     """
 
     response = model.generate_content(prompt)
@@ -82,7 +109,7 @@ def get_compatibilidade_vaga(resume, descricao_vaga):
     response = model.generate_content(prompt)
     return response.text
 
-def create_resumo(resume, keywords):
+def create_resumo_profissional(resume, keywords):
     perguntas = """
     Quem você é?
     O que você faz?
@@ -94,8 +121,25 @@ def create_resumo(resume, keywords):
     avalie o seguinte {resume} e procure por informações sobre os empregos anteriores dos candidato, cargos ocupados, responsabilidades e duração de cada experiência;
     Escreva um resumo profissional 6 linhas em primeira pessoa usando obrigatoriamente as {keywords} e respondendo as {perguntas}
     
-    
+    """
+    response = model.generate_content(prompt)
+    print("\nGerando resumo...")
+    return response.text
+
+def get_competencias(resume):
+    prompt = f"""
+    aja como um recrutador profissional de TI;
+    Leia o {resume} abaixo e com base na FORMAÇÃO COMPLEMENTAR e no RESUMO PROFISSIONAL me informe a lista de competências.
+    ### EXEMPLO
+            
+    Competências:
+    - Linux
+    - MySQL
+    - PostgreSQL
+    - SQL
     
     """
     response = model.generate_content(prompt)
     return response.text
+
+print(get_competencias(resume))
