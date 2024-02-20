@@ -1,62 +1,103 @@
-class LerCurriculoCommand:
-    def execute(self):
-        print("Lendo Curriculo Vitae")
 
-class LerDescricaoVagaCommand:
-    def execute(self):
-        print("Lendo descrição da vaga")
+import os
+import PyPDF2 as pdf
+import streamlit as st
+import google.generativeai as genai
 
-class ListarHabilidadesCommand:
-    def execute(self):
-        print("Listando habilidades técnicas da vaga")
+from dotenv import load_dotenv
 
-class CriarSecaoSobreCommand:
-    def execute(self):
-        print("Criando a seção SOBRE para Linkedin")
+load_dotenv()
 
-class ObterCompatibilidadeCommand:
-    def execute(self):
-        print("Obtendo compatibilidade com a vaga")
+genai.configure(api_key = os.getenv('GOOGLE_API_KEY'))
 
-class CriarResumoProfissionalCommand:
-    def execute(self):
-        print("Criando RESUMO PROFISSIONAL para o Currículo")
+def get_response(input):
+    generation_config = {
+        "temperature": 0.35,
+        "top_p": 1,
+        "top_k": 1,
+        "max_output_tokens": 2048,
+    }
+    model = genai.GenerativeModel(model_name='gemini-pro', generation_config=generation_config)
+    response = model.generate_content(input)
+    return response.text
 
-class Menu:
-    def __init__(self):
-        self.comandos = {
-            1: LerCurriculoCommand(),
-            2: LerDescricaoVagaCommand(),
-            3: ListarHabilidadesCommand(),
-            4: CriarSecaoSobreCommand(),
-            5: ObterCompatibilidadeCommand(),
-            6: CriarResumoProfissionalCommand()
-        }
+def input_pdf(pdf_file):
+    reader = pdf.PdfReader(pdf_file)
+    text = ""
+    for page in range(len(reader.pages)):
+        page = reader.pages[page]
+        text += str(page.extract_text())
+    return text
 
-    def mostrar_opcoes(self):
-        print("\nDIGITE O NÚMERO DA OPERAÇÃO DESEJADA:")
-        print("1 -> Ler Curriculo Vitae")
-        print("2 -> Ler descrição da vaga")
-        print("3 -> Listar habilidades técnicas da vaga")
-        print("4 -> Criar a seção SOBRE para Linkedin")
-        print("5 -> Obter compatibilidade com a vaga")
-        print("6 -> Criar RESUMO PROFISSIONAL para o Currículo")
-        print("0 -> Sair")
+text = input_pdf("/Users/tiago/Downloads/CV-Tiago_Ribeiro-2024.pdf")
+job_description = input_pdf("/Users/tiago/Downloads/descricao.pdf")
 
-    def executar_opcao(self, opcao):
-        comando = self.comandos.get(opcao)
-        if comando:
-            comando.execute()
-        else:
-            print("Opção inválida")
+def evaluate_resume():
+    prompt = f"""
+    ### INPUT
+    Act as a experienced Application Tracking System with a deep understanding of tech field,
+    software engineering, data science, data analyst and big data engineer;
 
-def main():
-    menu_principal = Menu()
-    opcao = -1
-    while opcao != 0:
-        menu_principal.mostrar_opcoes()
-        opcao = int(input("Opção escolhida: "))
-        menu_principal.executar_opcao(opcao)
+    ### CONTEXT
+    Your task is to evaluate the resume based on the given job description.
+    You must consider the job market is very competitive and you should provide best 
+    assistance for improving the resumes. 
 
-if __name__ == "__main__":
-    main()
+    Assign the percentage matching based on job description and the missing keywords with high accuracy
+    resume:{text}
+    job description:{job_description}
+
+    ### EXAMPLE
+    {{"JD Match":"%","MissingKeywords:[]","Profile Summary":""}}
+    """
+    return get_response(prompt)
+
+def build_resume():
+    prompt = f"""
+    ### INPUT
+    Act as a experienced Application Tracking System with a deep understanding of tech field,
+    software engineering, data science, data analyst and big data engineer;
+    
+    ### CONTEXT
+    Your task is to build a resume based on the given job description.
+    You must consider the job market is very competitive and you should provide best 
+    assistance for improving the resumes. 
+
+    resume:{text}
+    job description:{job_description}
+
+    ### EXAMPLE
+    Look and feel
+
+    ‣ Stick to two pages or less and a single-column
+    ‣ Make it boring! Black-on-white text, no bold, good spacing, 10-12pt font size
+    ‣ Have correct grammar and spelling
+    
+    👤 Head
+    
+    ‣ Start with Name AND Title (or Role)
+    ‣ Avoid unnecessary Personal Identifiable Information (PII) ⇒ no photo, no date of birth, no home address, no marital status, no number of kids
+    ‣ Drop links that don’t help, such as an empty GitHub or personal site
+    
+    🔎 Summary
+    ‣ Make it easy to read with bullet points and specifics
+    ‣ Remove generic terms like “team player”, “passionate”, or “experienced”
+    
+    👩‍💻 Experience
+    
+    ‣ Try to make it start toward the top of the first page
+    ‣ Show it In descending order without loops and with consistent date formats: ”Month YYYY” is best
+    ‣ Make each bullet point tell a story: a challenge, your work, the outcomes, and using active language (”completed” is good, “contributed” less so)
+    ‣ Spell out acronyms unless you are sure they are well-known
+    ‣ Beware of grandiose words that AI generates, like Revolutionized and Spearheaded, for example, as they are, well, artificial
+    ‣ Favor recent information only (no more than 10-15 years) unless you are sure it gives you an advantage to go farther back
+    
+    🤹 Skills
+    
+    ‣ Ignore skills and certifications that won’t get you hired, such as MS Office, git, Jira, Slack, MS Teams, or Miro
+    ‣ Ensure as much as possible that the skills needed for the job, as per the job description, match the skills in your resume
+    """
+
+    return get_response(prompt)
+
+st.write(build_resume())
